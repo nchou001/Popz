@@ -13,8 +13,6 @@ public class TerrainChunk : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D col) {
 		if (col.gameObject.name.Equals("TerrainGenerator")) {
 			terrainGen.GenerateTerrainRelevantTo(transform.position);
-			//counter++;
-			//Debug.Log ("Counter: "+ counter.ToString());
 		}
 		
 	}

@@ -18,14 +18,17 @@ public class Grid : MonoBehaviour {
 		height = topRight.y - bottomLeft.y;
 		cellSizeY = height / ((float)numCellsY);
 		cellSizeX = 1.6f;
+
+		//TODO: Fix these to be dynamic. These numbers are based off current background sprites of 2048x1536 resolution
+		cellSizeX = 2.45f;
+		cellSizeY = 1.8f;
+
 		numCellsX = Mathf.CeilToInt (width / cellSizeX);
 		grid = new bool[numCellsX * 2, numCellsY];
 	}
 
 	// Calculates cell sizes and sets up position
 	void Start () {
-
-
 	}
 
 	public void ClearGrid () {

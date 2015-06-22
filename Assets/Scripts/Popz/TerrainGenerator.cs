@@ -5,10 +5,14 @@ public class TerrainGenerator : MonoBehaviour {
 
 	public TerrainChunk terrainChunk;
 	public Grid grid;
+	public bool genPlants;
+	public bool genPlatforms;
 	private PlatformGenerator platformGen;
 	private CollectibleGenerator collectibleGen;
 	private GroundGenerator groundGen;
 	private NbackGenerator nbackGen;
+	private Player player;
+
 
 	// Used to determine current game modes
 	private PopzGameManager gameMngr;
@@ -25,6 +29,7 @@ public class TerrainGenerator : MonoBehaviour {
 		collectibleGen = GameObject.FindGameObjectWithTag ("CollectibleGen").GetComponent<CollectibleGenerator> ();
 		groundGen = GameObject.FindGameObjectWithTag ("GroundGen").GetComponent<GroundGenerator> ();
 		nbackGen = FindObjectOfType (typeof(NbackGenerator)) as NbackGenerator;
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ();
 
 		// Position generator and box collider 
 		Vector3 bottomLeft = Camera.main.ScreenToWorldPoint (new Vector3 (0f, 0f, 0f));
@@ -44,51 +49,82 @@ public class TerrainGenerator : MonoBehaviour {
 		chunkBoxCol.offset = new Vector2 (chunkBoxWidth/2f, chunkBoxHeight/2f);
 		chunkBoxCol.isTrigger = true;
 
-		GenerateTerrain (transform.position, 3);
+		genPlants = false;
+		genPlatforms = false;
+
+		//Debug.Log (transform.position);
+		GenerateTerrain (transform.position);
 	}
 	
 	public void GenerateTerrainRelevantTo (Vector3 pos) {
 		Vector3 spawnPos = pos + new Vector3 (((float)grid.numCellsX) * grid.cellSizeX,0f,0f);
-		Debug.Log ("Relevent to: ");
-		//if(Tcounter < 1){
+		GenerateTerrain (spawnPos);
+	}
 
-			GenerateTerrain (spawnPos,0);
-		//}
-		//else
-		//{
-		//	GenerateTerrain (spawnPos,3);
+	//Should be its own Class!
+	public void GenerateCloud()
+	{
+		//Creates Cloud GameObject
+		GameObject cloud =  new GameObject();
+		cloud.transform.position = new Vector3(0,0,0);
+		cloud.name = "Cloud";
 
-		//}
-		//Tcounter++;
+		//Create Platforms
+		platformGen.GeneratePlatforms(grid,cloud);
 
+		//Add Plants
+		collectibleGen.GenerateCollectibles (grid, cloud);
+
+
+		//Shift Cloud
+		Vector3 bottomLeft = Camera.main.ScreenToWorldPoint (new Vector3 (0f, 0f, 0f));
+		Vector3 topRight = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth, Camera.main.pixelHeight, 0f));
+		bottomLeft.y = Camera.main.GetComponent<FixedHeight> ().height - (topRight.y - bottomLeft.y)/2f;
+		cloud.transform.position = new Vector3(topRight.x,bottomLeft.y, cloud.transform.position.z);
+		cloud.AddComponent<Cloud>();
+
+		Transform[] children = cloud.GetComponentsInChildren<Transform>();
+		float tempx = 0f;
+		for(int i = 0; i < children.Length; i++)
+		{
+			if(children[i].position.x > tempx)
+			{
+				cloud.GetComponent<Cloud>().farthestPlatform = children[i].gameObject;
+				tempx = children[i].position.x;
+
+			}
+		}
+		//Debug.Log (children.);
+		//cloud.GetComponent<Cloud>().farthestPlatform = 
 
 	}
 
-	void GenerateTerrain (Vector3 spawnPos, int testLoc) {
-		TerrainChunk tc = GameObject.Instantiate (terrainChunk, spawnPos, Quaternion.identity) as TerrainChunk;
+	public void GenerateTerrain (Vector3 spawnPos) {
 		grid.ClearGrid ();
+		//Debug.Log (spawnPos.y);
+		TerrainChunk tc = GameObject.Instantiate (terrainChunk, spawnPos, Quaternion.identity) as TerrainChunk;
 
 		// Generate ground
 		groundGen.GenerateGrounds(grid, tc);
-
 
 		// Generate For Pattern
 		if (gameMngr.Modes ().Contains (GameModes.Pattern)) {
 
 			//Platforms should also be spawned in cloud format!
-			platformGen.GeneratePlatforms (grid, tc);
+			/*if(genPlatforms)
+			{
+				platformGen.GeneratePlatforms (grid, tc);
 
-			if(testLoc < 2)
+			}
+			if(genPlants)
 			{
 				collectibleGen.GenerateCollectibles (grid, tc);
-			}
-		
+			}*/
 		}
-
 
 		// Generate For Nback
 		if (gameMngr.Modes ().Contains (GameModes.Nback)) {
-			nbackGen.GenerateNbackInGrid (grid, tc);
+			nbackGen.GenerateNbackInGrid (grid, tc, groundGen);
 		}
 	}
 }

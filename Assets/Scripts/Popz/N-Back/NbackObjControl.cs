@@ -10,6 +10,8 @@ public class NbackObjControl : MonoBehaviour {
 	public AudioClip success;
 	public AudioClip fail;
 
+	static NbackObjControl currentRevealed = null;
+
 	// Use this for initialization
 	void Start () {
 		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ();
@@ -32,13 +34,37 @@ public class NbackObjControl : MonoBehaviour {
 
 	void UpdateReveal() {
 		var sphereCollider = player.gameObject.GetComponentInChildren<SphereCollider> ();
-		var radius = sphereCollider.gameObject.transform.localScale.x / 2.0f;
+		//var radius = sphereCollider.gameObject.transform.localScale.x / 2.0f;
 		//radius += 2.0f;
+		var radius = 1.0f;
 		var diameter = radius * 2; // As soon as last object has passed sphere, new object will reveal.
-		
-		if (Util.getDistance2D (sphereCollider.gameObject, this.gameObject) < diameter) {
-			GetComponent<Renderer>().material.color = revealColor;
+
+		// Reveal when past halfway of the screen
+		float halfway = Camera.main.ScreenToWorldPoint (new Vector3 (Camera.main.pixelWidth / 2, 0)).x;
+
+		if (transform.position.x < halfway) {
+			UpdateCurrentRevealed(this);
 		}
+
+//		if (Util.getDistance2D (sphereCollider.gameObject, this.gameObject) < diameter) {
+//			UpdateCurrentRevealed(this);
+//		}
+	}
+
+	void Reveal() {
+		GetComponent<Renderer>().material.color = revealColor;
+	}
+
+	void Cloak() {
+		GetComponent<Renderer>().material.color = Color.black;
+	}
+
+	static void UpdateCurrentRevealed(NbackObjControl next) {
+		if (currentRevealed) {
+			currentRevealed.Cloak ();	
+		}
+		currentRevealed = next;
+		next.Reveal ();
 	}
 
 	public void MarkCorrect() {
