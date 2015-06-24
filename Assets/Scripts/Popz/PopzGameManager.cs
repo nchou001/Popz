@@ -20,6 +20,9 @@ public class PopzGameManager : MonoBehaviour {
 	private MultiObjGameManager multiObjGame;
 	private NbackGameManager nbackGame;
 
+	private Player player;
+
+
 	void Awake () {
 		// Use settings if it was set and loaded from Menu
 		if (Settings.isSet) {
@@ -43,18 +46,36 @@ public class PopzGameManager : MonoBehaviour {
 		patternGame = FindObjectOfType (typeof(PatternLevelManager)) as PatternLevelManager;
 		multiObjGame = FindObjectOfType (typeof(MultiObjGameManager)) as MultiObjGameManager;
 		nbackGame = FindObjectOfType (typeof(NbackGameManager)) as NbackGameManager;
+		player = GameObject.FindGameObjectWithTag ("Player").GetComponent<Player> ();
 
 		// Start each game if enabled
 		// Note: Disable/Enable of Pattern and Nback currently done
 		// by disabling their generators in TerrainGenerator.cs, should be here
+
+
+		StartCoroutine("GameTimeWait",5f);	
+
+
+
+	}
+	
+	IEnumerator GameTimeWait(float displayTime)
+	{
+		yield return new WaitForSeconds(displayTime); 
+		player.canJump = true;
+		player.canRun = true;
+		player.canDoubleJump = true;
+
+		player.GetComponent<Animator>().SetInteger("PlayerState",1);
+
 		if (enableMultiObject) {
 			multiObjGame.startLevel();
 		}
-	}
-	
-	// Update is called once per frame
-	void Update () {
-	
+		if(enablePattern)
+		{
+			patternGame.StartPatternGame();
+		}
+
 	}
 
 	public List<GameModes> Modes() {

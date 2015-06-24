@@ -84,7 +84,7 @@ public class Menu : MonoBehaviour {
 
 		if (GUI.Button (factory.Generate (), "Play Game")) {
 			Settings.isSet = true;
-			Application.LoadLevel("Popz");
+			Application.LoadLevel(1);
 		}
 	}
 }

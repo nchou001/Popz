@@ -7,11 +7,11 @@ public class Player : MonoBehaviour {
 	public float jumpingSpeed = 5f;
 	public float runningSpeed = 1.7f;
 
-	public bool canRun = true;
-	public bool canJump = true;
+	public bool canRun = false;
+	public bool canJump = false;
 
 	// For testing purposes
-	public bool canDoubleJump = true;
+	public bool canDoubleJump = false;
 	private float[] platformPositions;
 	private int currentPlatform;
 
@@ -19,6 +19,7 @@ public class Player : MonoBehaviour {
 
 	private float screenBottom;
 	private PatternLevelManager levelManager;
+	public bool onGround = true;
 	// Use this for initialization
 	void Start() {
 //
@@ -52,6 +53,22 @@ public class Player : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+		//this.GetComponent<Animator>().SetInteger("PlayerState",2);
+
+		Debug.Log ("PlayerState: " + this.GetComponent<Animator>().GetInteger("PlayerState").ToString());
+
+		if(this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerRun"))
+		{
+			//Debug.Log ("Running State!");
+			this.GetComponent<Animator>().SetInteger("PlayerState",1);
+		}
+		if(this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerBoostFall"))
+		{
+			//Debug.Log ("Running State!");
+			this.GetComponent<Animator>().SetInteger("PlayerState",3);
+		}
+
 		if (jumpEnabled && canJump && Input.GetKeyDown ("space")){
 			Jump ();
 		}
@@ -60,6 +77,19 @@ public class Player : MonoBehaviour {
 		}
 		UpdateTouch ();
 		NbackPlatformsInput ();
+	}
+
+	void OnCollisionEnter2D(Collision2D col)
+	{
+
+		if(col.gameObject.tag.Equals ("NewGround")) 
+		{
+			if(!onGround)
+			{
+				onGround = true;
+				//Debug.Log ("Hit Ground!");
+			}
+		}
 	}
 
 	void OnCollisionStay2D (Collision2D col) {
@@ -83,6 +113,7 @@ public class Player : MonoBehaviour {
 	}
 	
 	void OnCollisionExit2D (Collision2D col) {
+
 		if (col.gameObject.tag.Equals ("Ground")) {
 			if (!canDoubleJump) {
 				canJump = false;
@@ -116,10 +147,15 @@ public class Player : MonoBehaviour {
 	}
 
 	void Jump () {
+		Debug.Log ("InJump");
 		this.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, jumpingSpeed);
+		this.GetComponent<Animator>().SetInteger("PlayerState",2);
+		onGround = false;
 	}
 
 	void OnSwipeUp () {
+		Debug.Log ("OnSwipeUp!");
+		//gameObject.GetComponent<Animator>().SetInteger("PlayerState",2);
 		Jump ();
 	}
 

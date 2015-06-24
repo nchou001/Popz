@@ -35,10 +35,13 @@ public class ParallaxBackground : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		//Debug.Log ("Resolution: " + Camera.main.pixelWidth);
+
 		PollForOffscreenImage ();
 		ParallaxMove ();
 		previousCamPos = cam.position;
 	}
+
+
 
 	void ArrangeImages () {
 		foreach (Transform img in images) {

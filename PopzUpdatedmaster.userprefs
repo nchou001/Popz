@@ -1,8 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace />
-  <MonoDevelop.Ide.Workbench ActiveDocument="../../../Desktop/Popz-master/Assets/Scripts/Popz/PopzGameManager.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets/Scripts/Popz/Player.cs">
     <Files>
-      <File FileName="../../../Desktop/Popz-master/Assets/Scripts/Popz/PopzGameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Popz/SwipeHandler.cs" Line="10" Column="34" />
+      <File FileName="Assets/Scripts/Popz/PopzGameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Popz/Pattern/PatternLevelManager.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Popz/ParallaxBackground.cs" Line="1" Column="1" />
+      <File FileName="Assets/Scripts/Popz/Player.cs" Line="70" Column="4" />
+      <File FileName="Assets/Scripts/Popz/Menu.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>

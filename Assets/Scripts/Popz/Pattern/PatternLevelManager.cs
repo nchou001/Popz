@@ -54,7 +54,9 @@ public class PatternLevelManager : MonoBehaviour {
 		roundsPerCollection = numRounds;
 		livesPerCollection = numLives;
 		//pattern.GeneratePattern(patternLength);
-		StartCoroutine("PatternGenerationWait",5f);	
+
+		//This starts the pattern game!
+		//StartCoroutine("PatternGenerationWait",5f);	
 	}
 	
 	IEnumerator RevealCollectionStatus(float displayTime) {
@@ -69,7 +71,10 @@ public class PatternLevelManager : MonoBehaviour {
 		StartCoroutine("PatternGenerationWait",time);	
 		
 	}
-	
+	public void StartPatternGame()
+	{
+		gameStarted = true;
+	}
 	IEnumerator PatternGenerationWait(float displayTime)
 	{
 		yield return new WaitForSeconds(displayTime);  
