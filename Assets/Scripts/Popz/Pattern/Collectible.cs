@@ -59,7 +59,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 
-public enum Species { Plant1, Plant2, Plant3, Plant4, Sphere, Cube, Capsule }; // Possible plant species
+public enum Species { Plant1, Plant2, Plant3, Plant4, Plant5, Sphere, Cube, Capsule }; // Possible plant species
 
 public class Collectible : MonoBehaviour {
 	
@@ -73,10 +73,28 @@ public class Collectible : MonoBehaviour {
 	
 	private Pattern pattern;
 	private PatternLevelManager levelManager;
+	bool moveUp = false;
 	
 	void Start () {
 		pattern = GameObject.FindGameObjectWithTag ("Pattern").GetComponent<Pattern> ();
 		levelManager = GameObject.FindGameObjectWithTag ("PatternLevelManager").GetComponent<PatternLevelManager> ();
+	}
+	void Update()
+	{
+		if(moveUp)
+		{
+			gameObject.transform.Translate(Vector2.up * Time.deltaTime*30);
+			if(gameObject.transform.position.y >= 400)
+			{
+				moveUp = false;
+			}
+		}
+
+	}
+	public void collectibleGoUp()
+	{
+		moveUp = true;
+
 	}
 	
 	void OnMouseDown () {
@@ -85,14 +103,19 @@ public class Collectible : MonoBehaviour {
 		{
 			if (pattern.current.color == color && pattern.current.species == species) 
 			{
-				Destroy (gameObject);
+				//Destroy (gameObject);
 				pattern.foundCollectible();
 				AudioSource.PlayClipAtPoint(success, transform.position);
+				//Play Bubble Animation
+				gameObject.GetComponentInChildren<Bubble>().CorrectChoice();
 			}	 
 			else 
 			{
 				levelManager.FailedPattern();
 				AudioSource.PlayClipAtPoint(fail, transform.position);
+				//Play Bubble Pop Animation
+				gameObject.GetComponentInChildren<Bubble>().InCorrectChoice();
+
 			}
 		}
 	}

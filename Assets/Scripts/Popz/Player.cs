@@ -56,7 +56,7 @@ public class Player : MonoBehaviour {
 
 		//this.GetComponent<Animator>().SetInteger("PlayerState",2);
 
-		Debug.Log ("PlayerState: " + this.GetComponent<Animator>().GetInteger("PlayerState").ToString());
+		//Debug.Log ("PlayerState: " + this.GetComponent<Animator>().GetInteger("PlayerState").ToString());
 
 		if(this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerRun"))
 		{
