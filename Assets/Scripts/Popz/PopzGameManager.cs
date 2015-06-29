@@ -43,6 +43,24 @@ public class PopzGameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
+
+		// Use settings if it was set and loaded from Menu
+		if (Settings.isSet) {
+			enablePattern = Settings.togglePattern;
+			enableNback = Settings.toggleNback;
+			enableMultiObject = Settings.toggleMultiObj;
+		}
+		
+		// Set game modes
+		gameModes = new List<GameModes> ();
+		if (enablePattern)
+			gameModes.Add (GameModes.Pattern);
+		if (enableNback)
+			gameModes.Add (GameModes.Nback);
+		if (enableMultiObject)
+			gameModes.Add (GameModes.Multiobj);
+
+
 		patternGame = FindObjectOfType (typeof(PatternLevelManager)) as PatternLevelManager;
 		multiObjGame = FindObjectOfType (typeof(MultiObjGameManager)) as MultiObjGameManager;
 		nbackGame = FindObjectOfType (typeof(NbackGameManager)) as NbackGameManager;

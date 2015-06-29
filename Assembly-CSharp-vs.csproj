@@ -46,6 +46,8 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
+     <Compile Include="Assets\PlayerBoostFallState.cs" />
+     <Compile Include="Assets\PlayerRunState.cs" />
      <Compile Include="Assets\Scripts\Old Prototypes\BackgroundScroller.cs" />
      <Compile Include="Assets\Scripts\Old Prototypes\CameraRotationController.cs" />
      <Compile Include="Assets\Scripts\Old Prototypes\ConstantRotate.cs" />

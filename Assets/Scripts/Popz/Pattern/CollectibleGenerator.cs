@@ -168,7 +168,7 @@ public class CollectibleGenerator : MonoBehaviour {
 	public Transform GenerateCollectible (float x, float y, int type, int called) {
 		Vector3 spawnPos = new Vector3 (x,y,0); 
 		
-		Debug.Log (type);
+		//Debug.Log (type);
 		Transform t = null;
 		
 		if(called == 0) // PAttern Called it
@@ -217,7 +217,7 @@ public class CollectibleGenerator : MonoBehaviour {
 			
 			//Make List! Not Just Random!!
 			randType = Random.Range (0, possibleTypes.Count);
-			Debug.Log ("RandType: "+randType);
+			//Debug.Log ("RandType: "+randType);
 			
 			collectibleType = possibleTypes[randType];
 			

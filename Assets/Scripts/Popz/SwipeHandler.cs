@@ -40,9 +40,14 @@ public class SwipeHandler : MonoBehaviour
 					else
 					{
 						if (sendUpMessage && delta.y > 0)
+						{
 							MessageTarget.SendMessage("OnSwipeUp", SendMessageOptions.DontRequireReceiver);
+							//MessageTarget.GetComponent<Player>().Jump();
+						}
 						else if (sendDownMessage && delta.y < 0)
+						{
 							MessageTarget.SendMessage("OnSwipeDown", SendMessageOptions.DontRequireReceiver);
+						}
 					}
 				}
 				else if (T.phase == TouchPhase.Canceled || T.phase == TouchPhase.Ended)
