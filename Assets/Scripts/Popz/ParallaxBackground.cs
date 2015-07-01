@@ -26,7 +26,7 @@ public class ParallaxBackground : MonoBehaviour {
 
 		offset = 10.19f;
 
-		//Debug.Log (offset);
+		Debug.Log (offset);
 		ArrangeImages ();
 
 		previousCamPos = cam.position;

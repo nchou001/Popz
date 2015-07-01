@@ -20,11 +20,6 @@ public class Player : MonoBehaviour {
 	private float screenBottom;
 	private PatternLevelManager levelManager;
 	public bool onGround = true;
-	public bool activateJump = false;
-	float jumpDelayNum = .2f;
-
-	bool justJumped = false;
-
 	// Use this for initialization
 	void Start() {
 //
@@ -55,54 +50,44 @@ public class Player : MonoBehaviour {
 //		Debug.Log ("Cell Size Y: " + grid.cellSizeY);
 //		currentPlatform = 0;
 	}
-	IEnumerator InitJumpDelay(float displayTime) {
-		this.GetComponent<Animator>().SetInteger("PlayerState",2);
-		yield return new WaitForSeconds(displayTime); 
-		Jump ();
-		//activateJump = true;
-
-	}
-
+	
 	// Update is called once per frame
 	void Update () {
 
+		//this.GetComponent<Animator>().SetInteger("PlayerState",2);
+
+		//Debug.Log ("PlayerState: " + this.GetComponent<Animator>().GetInteger("PlayerState").ToString());
+
+		if(this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerRun"))
+		{
+			//Debug.Log ("Running State!");
+			this.GetComponent<Animator>().SetInteger("PlayerState",1);
+		}
 		if(this.GetComponent<Animator>().GetCurrentAnimatorStateInfo(0).IsName("PlayerBoostFall"))
 		{
-			justJumped = false;
+			//Debug.Log ("Running State!");
+			this.GetComponent<Animator>().SetInteger("PlayerState",3);
 		}
 
 		if (jumpEnabled && canJump && Input.GetKeyDown ("space")){
-			if(onGround)
-			{
-			
-				StartCoroutine("InitJumpDelay",jumpDelayNum);		
-
-			}
-			else
-			{
-
-				this.GetComponent<Animator>().SetInteger("PlayerState",2);
-				Jump ();
-
-			}
+			Jump ();
 		}
 		if (canRun) {
 			transform.Translate(new Vector3(runningSpeed * Time.deltaTime, 0f, 0f));
 		}
-
 		UpdateTouch ();
 		NbackPlatformsInput ();
-		this.GetComponent<Animator>().SetBool("PlayerInAir",!onGround);
-
 	}
 
 	void OnCollisionEnter2D(Collision2D col)
 	{
+
 		if(col.gameObject.tag.Equals ("NewGround")) 
 		{
-			if(!onGround && !justJumped)
+			if(!onGround)
 			{
 				onGround = true;
+				//Debug.Log ("Hit Ground!");
 			}
 		}
 	}
@@ -128,13 +113,6 @@ public class Player : MonoBehaviour {
 	}
 	
 	void OnCollisionExit2D (Collision2D col) {
-		if(col.gameObject.tag.Equals ("NewGround")) 
-		{
-			if(!onGround)
-			{
-				onGround = false;
-			}
-		}
 
 		if (col.gameObject.tag.Equals ("Ground")) {
 			if (!canDoubleJump) {
@@ -169,25 +147,16 @@ public class Player : MonoBehaviour {
 	}
 
 	void Jump () {
-		justJumped = true;
-		onGround = false;
+		Debug.Log ("InJump");
 		this.GetComponent<Rigidbody2D> ().velocity = new Vector2 (0, jumpingSpeed);
+		this.GetComponent<Animator>().SetInteger("PlayerState",2);
+		onGround = false;
 	}
 
 	void OnSwipeUp () {
-		if (jumpEnabled && canJump){
-			//Jump ();
-			if(onGround)
-			{
-				StartCoroutine("InitJumpDelay",jumpDelayNum);
-			}
-			else
-			{
-				this.GetComponent<Animator>().SetInteger("PlayerState",2);
-				Jump ();
-			}
-
-		}
+		Debug.Log ("OnSwipeUp!");
+		//gameObject.GetComponent<Animator>().SetInteger("PlayerState",2);
+		Jump ();
 	}
 
 	private void SetPositionByPlatform(int platform) {
