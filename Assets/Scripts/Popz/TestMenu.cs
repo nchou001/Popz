@@ -7,7 +7,7 @@ public class TestMenu : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		Screen.SetResolution (1024, 768, true);
-		StyleFont.fontSize = 14;
+		StyleFont.fontSize = 12;
 		StyleFont.font = (Font)Resources.Load ("SCIEP___");
 	}
 	

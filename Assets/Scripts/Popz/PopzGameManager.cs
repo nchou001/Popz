@@ -81,20 +81,4 @@ public class PopzGameManager : MonoBehaviour {
 	public List<GameModes> Modes() {
 		return gameModes;
 	}
-
-	void OnGUI() {
-		/*
-		float screenScale = Screen.width / 480.0f;
-		Matrix4x4 scaledMatrix = Matrix4x4.Scale(new Vector3(screenScale,screenScale,screenScale));
-		GUI.matrix = scaledMatrix;
-		*/
-		GUI.skin.label.fontSize = GUI.skin.box.fontSize = GUI.skin.button.fontSize = 20;
-
-		float width = 80;
-		float height = 90;
-		var text = "Menu";
-		if (GUI.Button (new Rect (Screen.width - width, Screen.height - height, width, height), text)) {
-			Application.LoadLevel("PopzMenu");
-		}
-	}
 }

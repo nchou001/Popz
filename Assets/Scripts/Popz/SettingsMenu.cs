@@ -13,6 +13,7 @@ public class SettingsMenu : MonoBehaviour {
 	
 	public void Play()
 	{
+		Settings.isSet = true;
 		Application.LoadLevel (1);
 	}
 }
